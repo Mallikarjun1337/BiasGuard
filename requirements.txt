@@ -1,0 +1,31 @@
+# === Core Data Science ===
+pandas==2.3.3
+numpy==2.4.0
+scikit-learn==1.8.0
+scipy==1.16.3
+statsmodels==0.14.6
+
+# === Microsoft AI Services ===
+azure-ai-ml==1.31.0
+azure-identity==1.25.1
+mlflow==3.8.1
+azure-ai-textanalytics==5.3.0
+azure-core==1.37.0
+requests==2.32.5
+
+# === Visualization ===
+matplotlib==3.10.8
+seaborn==0.13.2
+plotly==6.5.1
+kaleido==1.2.0
+
+# === Utilities ===
+python-dotenv==1.2.1
+openpyxl==3.1.5
+
+# === Optional: Web Dashboard ===
+streamlit==1.52.2
+
+# === Report Generation ===
+reportlab==4.4.7
+markdown==3.10
