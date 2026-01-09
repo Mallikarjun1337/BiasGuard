@@ -9,6 +9,8 @@ Centralized configuration for:
 - Responsible AI defaults
 """
 
+
+
 import os
 from pathlib import Path
 from dotenv import load_dotenv
@@ -54,6 +56,18 @@ class Config:
     AZURE_SUBSCRIPTION_ID = os.getenv('AZURE_SUBSCRIPTION_ID')
     AZURE_RESOURCE_GROUP = os.getenv('AZURE_RESOURCE_GROUP')
     AZURE_ML_WORKSPACE = os.getenv('AZURE_ML_WORKSPACE')
+    # ================================================================
+    # Demo Mode (Imagine Cup / Public Deployment)
+    # ================================================================
+    # When TRUE:
+    # - Azure ML is simulated
+    # - Fairness logic still runs
+    # - No Azure authentication required
+    #
+    # When FALSE:
+    # - Full Azure ML pipeline is used
+    #
+    DEMO_MODE = os.getenv("DEMO_MODE", "true").lower() == "true"
 
     # ================================================================
     # Fairness Thresholds (Industry Standards)
@@ -212,12 +226,11 @@ class Config:
         """
         Validate Azure Machine Learning credentials.
 
-        Returns:
-            bool: True if credentials are present
-
-        Raises:
-            ValueError: If credentials are missing
+        In DEMO_MODE, validation is skipped (Imagine Cup safe).
         """
+        if cls.DEMO_MODE:
+            return True
+
         if not (
                 cls.AZURE_SUBSCRIPTION_ID and
                 cls.AZURE_RESOURCE_GROUP and
@@ -249,14 +262,15 @@ class Config:
                 cls.AZURE_LANGUAGE_ENDPOINT and cls.AZURE_LANGUAGE_KEY
             ),
             'azure_ml_configured': {
-                'configured': bool(
+                'configured': True if cls.DEMO_MODE else bool(
                     cls.AZURE_SUBSCRIPTION_ID and
                     cls.AZURE_RESOURCE_GROUP and
                     cls.AZURE_ML_WORKSPACE
                 ),
-                'workspace': cls.AZURE_ML_WORKSPACE,
-                'resource_group': cls.AZURE_RESOURCE_GROUP
+                'mode': 'DEMO' if cls.DEMO_MODE else 'LIVE',
+                'workspace': cls.AZURE_ML_WORKSPACE
             }
+
         }
 
 
